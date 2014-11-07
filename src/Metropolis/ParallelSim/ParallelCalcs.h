@@ -44,7 +44,7 @@ namespace ParallelCalcs
 	///   Used for system energy calculation.
 	/// @return Returns total molecular energy contribution, without
 	///   intramolecular energy.
-	Real calcMolecularEnergyContribution(Box *box, int molIdx, int startIdx = 0);
+	Real calcMolecularEnergyContribution(Box *box, int molIdx, int startIdx = 0, int parallelLaunches = 1);
 }
 
 #endif

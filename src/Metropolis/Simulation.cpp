@@ -77,6 +77,7 @@ void Simulation::run()
 	Real  kT = kBoltz * enviro->temp;
 	int accepted = 0;
 	int rejected = 0;
+	float acceptanceRate = 0.0f;
 
 	clock_t startTime, endTime;
     startTime = clock();
@@ -110,11 +111,12 @@ void Simulation::run()
 	//Loop for each individual step
 	for (int move = stepStart; move < (stepStart + simSteps); move++)
 	{
+		acceptanceRate = accepted / (float) (accepted + rejected);
+		
 		//provide printouts at each pre-determined interval (not at each step)
 		if (args.statusInterval > 0 && (move - stepStart) % args.statusInterval == 0)
 		{
-			std::cout << "Step " << move << ":\n--Current Energy: " << oldEnergy << std::endl;	
-
+			std::cout << "Step " << move << ":\n--Current Energy: " << oldEnergy << std::endl;
 		}
 		
 		if (args.stateInterval > 0 && move > stepStart && (move - stepStart) % args.stateInterval == 0)
@@ -143,7 +145,8 @@ void Simulation::run()
 		//Calculate the new energy after translation
 		if (args.simulationMode == SimulationMode::Parallel)
 		{
-			newEnergyCont = ParallelCalcs::calcMolecularEnergyContribution(box, changeIdx);
+			int parallelLaunches = (int) fmaxf(ceil(1 / acceptanceRate), 1.0f);
+			newEnergyCont = ParallelCalcs::calcMolecularEnergyContribution(box, changeIdx, 0, parallelLaunches);
 		}
 		else
 		{

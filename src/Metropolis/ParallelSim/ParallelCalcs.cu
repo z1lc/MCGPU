@@ -59,7 +59,7 @@ Real ParallelCalcs::calcSystemEnergy(Box *box)
     return totalEnergy;
 }
 
-Real ParallelCalcs::calcMolecularEnergyContribution(Box *box, int molIdx, int startIdx)
+Real ParallelCalcs::calcMolecularEnergyContribution(Box *box, int molIdx, int startIdx, int parrallelLaunches)
 {
 	ParallelBox *pBox = (ParallelBox*) box;
 	
